@@ -19,7 +19,10 @@ chmod 400 secrets/munge.key
 
 ```bash
 #in the project root directory (/slurm-docker)
+#build the base
 docker build -t slurm-base:latest ./base
+#build controller and worker containers
 docker compose build
+#run
 docker compose up -d
 ```

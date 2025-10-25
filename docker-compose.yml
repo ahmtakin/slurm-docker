@@ -15,6 +15,16 @@ services:
     image: slurm-worker:latest
     hostname: worker1
     depends_on: [controller]
+    devices:
+      - /dev/fuse
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - seccomp:unconfined
+      - apparmor:unconfined
+    environment:
+      APPTAINER_CACHEDIR: /shared/.apptainer/cache
+      APPTAINER_TMPDIR: /shared/.apptainer/tmp
     volumes:
       - ./configs/slurm.conf:/etc/slurm/slurm.conf:ro
       - ./secrets/munge.key:/run/host/munge.key:ro
@@ -26,6 +36,16 @@ services:
     image: slurm-worker:latest
     hostname: worker2
     depends_on: [controller]
+    devices:
+      - /dev/fuse
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - seccomp:unconfined
+      - apparmor:unconfined
+    environment:
+      APPTAINER_CACHEDIR: /shared/.apptainer/cache
+      APPTAINER_TMPDIR: /shared/.apptainer/tmp
     volumes:
       - ./configs/slurm.conf:/etc/slurm/slurm.conf:ro
       - ./secrets/munge.key:/run/host/munge.key:ro
