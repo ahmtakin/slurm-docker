@@ -26,3 +26,8 @@ docker compose build
 #run
 docker compose up -d
 ```
+
+###### verify apptainer sanity
+```bash
+./scripts/verify_apptainer.sh --all
+```
