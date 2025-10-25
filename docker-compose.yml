@@ -1,0 +1,37 @@
+version: "3.9"
+services:
+  controller:
+    build: { context: ./controller }
+    image: slurm-controller:latest
+    hostname: controller
+    volumes:
+      - ./configs/slurm.conf:/etc/slurm/slurm.conf:ro
+      - ./secrets/munge.key:/run/host/munge.key:ro
+      - ./shared:/shared
+    networks: { slurmnet: { aliases: [controller] } }
+
+  worker1:
+    build: { context: ./worker }
+    image: slurm-worker:latest
+    hostname: worker1
+    depends_on: [controller]
+    volumes:
+      - ./configs/slurm.conf:/etc/slurm/slurm.conf:ro
+      - ./secrets/munge.key:/run/host/munge.key:ro
+      - ./shared:/shared
+    networks: { slurmnet: { aliases: [worker1] } }
+
+  worker2:
+    build: { context: ./worker }
+    image: slurm-worker:latest
+    hostname: worker2
+    depends_on: [controller]
+    volumes:
+      - ./configs/slurm.conf:/etc/slurm/slurm.conf:ro
+      - ./secrets/munge.key:/run/host/munge.key:ro
+      - ./shared:/shared
+    networks: { slurmnet: { aliases: [worker2] } }
+
+networks:
+  slurmnet:
+    driver: bridge
