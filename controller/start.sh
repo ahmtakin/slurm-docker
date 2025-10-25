@@ -11,11 +11,23 @@ fi
 # Required runtime & log directories for munge
 mkdir -p /run/munge /var/lib/munge /var/log/munge
 
-# Ownership & permissions as munge expects
-chown -R munge:munge /etc/munge /var/lib/munge /var/log/munge /run/munge || true
-chmod 0700 /etc/munge /var/lib/munge /var/log/munge || true
-chmod 0755 /run/munge || true
-chmod 0400 /etc/munge/munge.key || true
+# Ownership & permissions as munge expects; bail out if macOS bind mount blocks fixes
+if ! chown -R munge:munge /etc/munge /var/lib/munge /var/log/munge /run/munge; then
+  echo "Failed to chown munge directories; make sure Docker Desktop is allowed to manage ownership for this bind mount." >&2
+  exit 1
+fi
+chmod 0700 /etc/munge /var/lib/munge /var/log/munge
+chmod 0755 /run/munge
+chmod 0400 /etc/munge/munge.key
+
+if [ ! -e /etc/localtime ]; then
+  ln -sf /usr/share/zoneinfo/Etc/UTC /etc/localtime || true
+fi
+
+mkdir -p /shared/.apptainer/cache /shared/containers /shared/out || true
+
+export APPTAINER_CAP_PATH=/etc/apptainer/capabilities-docker.conf
+export APPTAINER_EXPERIMENTAL=oci
 
 munged --force -v
 sleep 1

@@ -1,5 +1,6 @@
 .DS_Store
-shared/
+shared/*
+!shared/
 worker/data/
 worker/logs/
 secrets/

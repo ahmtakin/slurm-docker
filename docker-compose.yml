@@ -24,7 +24,7 @@ services:
       - apparmor:unconfined
     environment:
       APPTAINER_CACHEDIR: /shared/.apptainer/cache
-      APPTAINER_TMPDIR: /shared/.apptainer/tmp
+      APPTAINER_TMPDIR: /tmp/apptainer/tmp
     volumes:
       - ./configs/slurm.conf:/etc/slurm/slurm.conf:ro
       - ./secrets/munge.key:/run/host/munge.key:ro
@@ -45,7 +45,7 @@ services:
       - apparmor:unconfined
     environment:
       APPTAINER_CACHEDIR: /shared/.apptainer/cache
-      APPTAINER_TMPDIR: /shared/.apptainer/tmp
+      APPTAINER_TMPDIR: /tmp/apptainer/tmp
     volumes:
       - ./configs/slurm.conf:/etc/slurm/slurm.conf:ro
       - ./secrets/munge.key:/run/host/munge.key:ro
